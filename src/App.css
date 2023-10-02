@@ -9,9 +9,10 @@
     margin-top: 2rem;
 }
 
-.image_result img {
-    width: 100%;
+.detector_container {
+    position: relative;
+}
+
+.detector_container img {
     height: 100%;
-    object-fit: cover;
-    object-position: center;
 }
