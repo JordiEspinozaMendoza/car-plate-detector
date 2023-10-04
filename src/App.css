@@ -16,3 +16,25 @@
 .detector_container img {
     height: 100%;
 }
+
+.founded_car {
+    cursor: pointer;
+}
+
+.founded_cars {
+    display: flex;
+    flex-direction: column;
+}
+
+.founded_cars img {
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
+
+.founded_cars_list,
+.image_result_list {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+}
