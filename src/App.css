@@ -73,3 +73,16 @@ button {
     object-fit: contain;
     margin-bottom: 1rem;
 }
+
+.server-down {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.server-down img {
+    height: 400px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+}
