@@ -81,7 +81,7 @@ const ObjectDetector = () => {
                     alt=""
                     className="image_result_item"
                   />
-                  <span>Car plate: {carPlate?.text}</span>
+                  {/* <span>Car plate: {carPlate?.text}</span> */}
                 </div>
               ))}
             </div>
