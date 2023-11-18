@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Loader } from "../Loader";
+import Onboarding from "../Onboarding/Onboarding";
 
 const ObjectDetector = () => {
   const [foundedCarPlates, setFoundedCarPlates] = useState([]);
@@ -7,12 +8,14 @@ const ObjectDetector = () => {
 
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   const resetState = () => {
     setFoundedCarPlates([]);
     setError(null);
     setLoading(false);
     setResults(false);
+    setSuccess(false);
   };
 
   const handleChangeImage = async (e) => {
@@ -32,32 +35,39 @@ const ObjectDetector = () => {
       .then((data) => {
         setFoundedCarPlates(data.car_plates);
         setResults(data.results);
+        setSuccess(true);
       })
-      .catch(() => setError(true));
+      .catch(() => {
+        setError(true);
+        setSuccess(false);
+      });
 
     setLoading(false);
   };
 
   return (
-    <div>
-      <h1>Car plate detector</h1>
-      <input
-        type="file"
-        accept="image/png, image/jpeg, image/jpg, image/bmp, image/webp"
-        hidden
-        onChange={handleChangeImage}
-      />
-      <button
-        disabled={loading}
-        onClick={() => document.querySelector("input[type=file]").click()}
-      >
-        Upload image
-      </button>
-
-      {loading && <Loader />}
+    <div className="object_detector">
+      {!loading && (
+        <>
+          <input
+            type="file"
+            accept="image/png, image/jpeg, image/jpg, image/bmp, image/webp"
+            hidden
+            onChange={handleChangeImage}
+          />
+          <button
+            disabled={loading}
+            onClick={() => document.querySelector("input[type=file]").click()}
+          >
+            Upload image
+          </button>
+          {!success && !error && <Onboarding />}
+        </>
+      )}
 
       <div className="results">
-        {results && (
+        {loading && <Loader />}
+        {results && foundedCarPlates.length > 0 && (
           <div className="image_result">
             <h2>Results</h2>
             <div className="image_result_list">
@@ -69,25 +79,38 @@ const ObjectDetector = () => {
             </div>
           </div>
         )}
-
-        {foundedCarPlates.length > 0 && (
-          <div className="image_result">
-            <h3>Founded car plates: {foundedCarPlates.length}</h3>
-            <div className="image_result_list">
-              {foundedCarPlates.map((carPlate, index) => (
-                <div key={index} className="image_result_item_container">
-                  <img
-                    src={"data:image/png;base64," + carPlate?.image}
-                    alt=""
-                    className="image_result_item"
-                  />
-                  {/* <span>Car plate: {carPlate?.text}</span> */}
+        {success && (
+          <>
+            {foundedCarPlates.length > 0 ? (
+              <div className="image_result">
+                <h3>Founded car plates: {foundedCarPlates.length}</h3>
+                <div className="image_result_list">
+                  {foundedCarPlates.map((carPlate, index) => (
+                    <div key={index} className="image_result_item_container">
+                      <img
+                        src={"data:image/png;base64," + carPlate?.image}
+                        alt=""
+                        className="image_result_item"
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            ) : (
+              <div className="image_result">
+                <h2>No car plates found</h2>
+                <img
+                  className="image_result_item"
+                  src="https://media.tenor.com/GopcJIF_Y98AAAAC/lost-kermit.gif"
+                  alt=""
+                />
+              </div>
+            )}
+          </>
         )}
+
         {error && <p>Image not processed, please try again</p>}
+        {error || (success && <button onClick={resetState}>Try again</button>)}
       </div>
     </div>
   );
