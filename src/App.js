@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./App.css";
 import ObjectDetector from "./components/ObjectDetector/ObjectDetector";
 import { Loader } from "./components/Loader";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   const [loadingFetchServerStatus, setLoadingFetchServerStatus] =
@@ -29,6 +30,9 @@ function App() {
 
   return (
     <div className="App">
+      <div id="header">
+        <h1>Car Plate Detector</h1>
+      </div>
       {loadingFetchServerStatus ? (
         <Loader message="Loading server status" />
       ) : serverStatus === "UP" ? (
@@ -43,6 +47,7 @@ function App() {
           <button onClick={handleFetchServerStatus}>Try again</button>
         </div>
       )}
+      <Footer />
     </div>
   );
 }
